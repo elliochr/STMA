@@ -12,8 +12,8 @@ let hbs = require('express-handlebars').create({
     partialsDir: `${__dirname}/views/partials`
 });
 
-let multer = require('multer');
-let upload = multer();
+// let multer = require('multer');
+// let upload = multer();
 
 
 //login/authentication 
@@ -62,7 +62,7 @@ app.get(`/img/${imgFile}`, function(req,res){
 });
 
 
-
+/******************************** Begin page Routes *************************************************/
 app.get('/', function (req, res) {
     context = [];
     context.title = '';
@@ -70,7 +70,7 @@ app.get('/', function (req, res) {
     res.render('login', context);
 });
 
-/******************************** End Create Account Page Routes ************************************/
+/******************************** End  Page Routes ************************************/
 	
 //404 error
 app.use(function(req,res){
