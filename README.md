@@ -1,3 +1,3 @@
 # STMA
-Have Node.js installed. Go to chosen root folder for webapp.
+Have Node.js installed. Go to chosen root directory for webapp.
   npm install
