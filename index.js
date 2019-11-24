@@ -65,7 +65,7 @@ app.get(`/img/${imgFile}`, function(req,res){
 
 
 function getUser(res, mysql, password, userLoggedIn){
-    let sql = `SELECT id, position, first_name, last_name FROM personnel WHERE password = ?`;
+    let sql = `SELECT idpersonnel, position, first_name, last_name FROM personnel WHERE password = ?`;
     let insert = [password];
 
     mysql.pool.query(sql, insert, function(err, results, fields){
@@ -83,7 +83,7 @@ console.log(results);
                     console.log(err);
                     return;
                 }
-                userLoggedIn(results[0], res[0]);
+                userLoggedIn(results[0], res[0].permissions);
             })
         }
     })
@@ -109,6 +109,7 @@ app.post('/login', function (req, res, next) {
 
         function userLoggedIn(user, permission) {
             if (user){
+                console.log(permission);
                 req.session.userId = user.id;
                 req.session.fName = user.first_name;
                 req.session.lName = user.last_name;
@@ -116,10 +117,10 @@ app.post('/login', function (req, res, next) {
                 context.fName = req.session.fName;
                 context.lName = req.session.lName;
                 if(permission < 3){
-                    res.render('commonHome', context);
+                    res.render('adminHome', context);
                 }
                 else{
-                    res.render('adminHome', context);
+                    res.render('commonHome', context);
                 }
             }
             else {
