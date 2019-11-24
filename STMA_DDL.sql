@@ -198,5 +198,6 @@ INSERT INTO `positions` (position_title, permissions) VALUES ('IT', '1'), ('Supe
 UNLOCK TABLES;
 
 LOCK TABLES `personnel` WRITE;
-INSERT INTO `personnel` (password, position, first_name, last_name, start_date, pto_accumulation_rate) VALUES ('000000', '1', 'no', 'no', '1970-01-01', '0');
+INSERT INTO `personnel` (password, position, first_name, last_name, start_date, pto_accumulation_rate) VALUES ('000000', '1', 'IT', 'Champion', '1970-01-01', '0');
+INSERT INTO `personnel` (password, position, first_name, last_name, start_date, pto_accumulation_rate) VALUES ('111111', '3', 'Little', 'Guy', '1970-01-01', '0');
 UNLOCK TABLES;

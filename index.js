@@ -83,8 +83,9 @@ app.post('/login', function (req, res, next) {
                 req.session.fName = user.first_name;
                 req.session.lName = user.last_name;
                 req.session.loggedIn = true;
-                context.fName = req.session.fName;      // set for display in menu
-                context.lName = req.session.lName;
+                context.id = user.id;        // for more direct access to db
+                context.fName = user.first_name;      // set for display in menu
+                context.lName = user.last_name;
                 if(permission < 3){
                     res.render('adminHome', context);   // return admin menu
                 }
