@@ -1,13 +1,13 @@
 let bodyParser = require('body-parser');
 let path = require('path');
-let mysql = require('./dbcon.js');
-let fs = require('fs');
+let mysql = require('./dbcon.js');              // set database connection
+let fs = require('fs');                         // access to local files
 
 var express = require('express');
 let app = express();
 let hbs = require('express-handlebars').create({
     defaultLayout: 'main',
-    extname: 'hbs',
+    extname: 'hbs',                             // set file extension to .hbs
     layoutDir: `${__dirname}/views/layouts`,
     partialsDir: `${__dirname}/views/partials`
 });
@@ -30,32 +30,32 @@ app.use(session({
         path: '/',
         secure: false,
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000                 // set session timeout in ms
     }
 
 }));
 
 
-app.engine('hbs', hbs.engine);
+app.engine('hbs', hbs.engine);                      
 app.set('view engine', 'hbs');
 app.set('port', 11113);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
-app.use(express.static('public'));
+app.use(express.static('public'));                  // set name of public resource directory
 //app.use('/', require('./queries.js'))
 
-let cssFile;
+let cssFile;                                        // access to public css files
 app.get(`/css/${cssFile}`, function(req,res){
     res.send(`/css/${cssFile}`);
     res.end;
 });
-let jsFile;
+let jsFile;                                         // access to public js files
 app.get(`/js/${jsFile}`, function(req,res){
     res.send(`/js/${jsFile}`);
     res.end();
 });
-let imgFile;
+let imgFile;                                        // access to public image files
 app.get(`/img/${imgFile}`, function(req,res){
     res.send(`/img/${imgFile}`);
     res.end();
@@ -63,8 +63,9 @@ app.get(`/img/${imgFile}`, function(req,res){
 
 
 
-
+// login authentication queries: comes from login route
 function getUser(res, mysql, password, userLoggedIn){
+    // find matching password query
     let sql = `SELECT idpersonnel, position, first_name, last_name FROM personnel WHERE password = ?`;
     let insert = [password];
 
@@ -75,6 +76,7 @@ function getUser(res, mysql, password, userLoggedIn){
         }
 console.log(results);
         if(results[0]){
+            // find position's access permissions query
             let sql = `SELECT permissions FROM positions WHERE idpositions = ?`;
             let insert = [results[0].position]
 
@@ -83,7 +85,7 @@ console.log(results);
                     console.log(err);
                     return;
                 }
-                userLoggedIn(results[0], res[0].permissions);
+                userLoggedIn(results[0], res[0].permissions);   // run provided callback function
             })
         }
     })
@@ -91,51 +93,54 @@ console.log(results);
 
 
 /******************************** Begin page Routes *************************************************/
+/** Home - login page route */
 app.get('/', function (req, res) {
-    context = [];
+    context = {};
     context.title = '';
     context.layout = 'loginLayout';
-    res.render('login', context);
+    res.render('login', context);                       // send login screen
 });
 
+// login authentication route - returns: fail login back to Home, success to admin or common menus based on permissions
 app.post('/login', function (req, res, next) {
-    var password = req.body.password;
+    var password = req.body.password;   
     var context = {};
-    if (password == '') {
+    if (password == '') {                               // empty password
         context.invalid = true;
-        res.render('login', context);
+        res.render('login', context);                   //
     } else {
-        getUser(res, mysql, password, userLoggedIn);
-
+        getUser(res, mysql, password, userLoggedIn);    // check password
+        // callback for getUser() queries
         function userLoggedIn(user, permission) {
-            if (user){
+            if (user){                                  // found user
                 console.log(permission);
-                req.session.userId = user.id;
+                req.session.userId = user.id;           // save session variables
                 req.session.fName = user.first_name;
                 req.session.lName = user.last_name;
                 req.session.loggedIn = true;
-                context.fName = req.session.fName;
+                context.fName = req.session.fName;      // set for display in menu
                 context.lName = req.session.lName;
                 if(permission < 3){
-                    res.render('adminHome', context);
+                    res.render('adminHome', context);   // return admin menu
                 }
                 else{
-                    res.render('commonHome', context);
+                    res.render('commonHome', context);  // return common menu
                 }
             }
             else {
-                context.invalid = true;
-                res.render('login', context);
+                context.invalid = true;                 // user not found
+                res.render('login', context);           // return to login screen
             }
         }
     }
 
 });
 
+// logout route - !!not finalized!!
 app.get('/logout', function (req, res, next) {
     req.session.loggedIn = false;
-    req.session.destroy();
-    res.redirect('/');
+    req.session.destroy();                              // remove session
+    res.redirect('/');                                  // return to login screen
 });
 
 /******************************** End  Page Routes ************************************/
