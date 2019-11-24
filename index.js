@@ -62,12 +62,80 @@ app.get(`/img/${imgFile}`, function(req,res){
 });
 
 
+
+
+function getUser(res, mysql, password, userLoggedIn){
+    let sql = `SELECT idpersonnel, position, first_name, last_name FROM personnel WHERE password = ?`;
+    let insert = [password];
+
+    mysql.pool.query(sql, insert, function(err, results, fields){
+        if (err) {
+            console.log(err);
+            return;
+        }
+console.log(results);
+        if(results[0]){
+            let sql = `SELECT permissions FROM positions WHERE idpositions = ?`;
+            let insert = [results[0].position]
+
+            mysql.pool.query(sql, insert, function(err, res, f){
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                userLoggedIn(results[0], res[0].permissions);
+            })
+        }
+    })
+}
+
+
 /******************************** Begin page Routes *************************************************/
 app.get('/', function (req, res) {
     context = [];
     context.title = '';
     context.layout = 'loginLayout';
     res.render('login', context);
+});
+
+app.post('/login', function (req, res, next) {
+    var password = req.body.password;
+    var context = {};
+    if (password == '') {
+        context.invalid = true;
+        res.render('login', context);
+    } else {
+        getUser(res, mysql, password, userLoggedIn);
+
+        function userLoggedIn(user, permission) {
+            if (user){
+                console.log(permission);
+                req.session.userId = user.id;
+                req.session.fName = user.first_name;
+                req.session.lName = user.last_name;
+                req.session.loggedIn = true;
+                context.fName = req.session.fName;
+                context.lName = req.session.lName;
+                if(permission < 3){
+                    res.render('adminHome', context);
+                }
+                else{
+                    res.render('commonHome', context);
+                }
+            }
+            else {
+                context.invalid = true;
+                res.render('login', context);
+            }
+        }
+    }
+
+});
+
+app.get('/logout', function (req, res, next) {
+    req.session.loggedIn = false;
+    req.session.destroy();
+    res.redirect('/');
 });
 
 /******************************** End  Page Routes ************************************/
