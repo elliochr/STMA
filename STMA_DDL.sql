@@ -52,7 +52,7 @@ DROP TABLE IF EXISTS `personnel` ;
 
 CREATE TABLE IF NOT EXISTS `personnel` (
   `idpersonnel` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `password` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(6) NOT NULL,
   `position` INT UNSIGNED NOT NULL,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -198,5 +198,5 @@ INSERT INTO `positions` (position_title, permissions) VALUES ('IT', '1'), ('Supe
 UNLOCK TABLES;
 
 LOCK TABLES `personnel` WRITE;
-INSERT INTO `personnel` (password, position, first_name, last_name, start_date, pto_accumulation_rate) VALUES ('0000', '1', 'no', 'no', '1970-01-01', '0');
+INSERT INTO `personnel` (password, position, first_name, last_name, start_date, pto_accumulation_rate) VALUES ('000000', '1', 'no', 'no', '1970-01-01', '0');
 UNLOCK TABLES;
