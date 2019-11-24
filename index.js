@@ -4,37 +4,13 @@ let mysql = require('./dbcon.js');              // set database connection
 let fs = require('fs');                         // access to local files
 
 var express = require('express');
-let app = express();
+let app = express();                            // begin application
 let hbs = require('express-handlebars').create({
     defaultLayout: 'main',
     extname: 'hbs',                             // set file extension to .hbs
     layoutDir: `${__dirname}/views/layouts`,
     partialsDir: `${__dirname}/views/partials`
 });
-
-// let multer = require('multer');
-// let upload = multer();
-
-
-//login/authentication 
-var auth = require('./auth'); //module located in ./auth.js that is used to check if user is logged in. Login page is rendered if user not logged in.
-var session = require('express-session');
-var bcrypt = require('bcrypt'); //used to hash password - adds workload when hashing
-const saltRounds = 10; //Used to determine server workload when hashing passwords
-app.use(session({
-    secret: "superSecretPassword",
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-        path: '/',
-        secure: false,
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000                 // set session timeout in ms
-    }
-
-}));
-
 
 app.engine('hbs', hbs.engine);                      
 app.set('view engine', 'hbs');
@@ -61,37 +37,26 @@ app.get(`/img/${imgFile}`, function(req,res){
     res.end();
 });
 
+//login/authentication 
+var auth = require('./auth'); //module located in ./auth.js that is used to check if user is logged in. Login page is rendered if user not logged in.
+var session = require('express-session');
+var bcrypt = require('bcrypt'); //used to hash password - adds workload when hashing
+const saltRounds = 10; //Used to determine server workload when hashing passwords
+app.use(session({
+    secret: "superSecretPassword",
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        path: '/',
+        secure: false,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000                 // set session timeout in ms
+    }
 
+}));
 
-// login authentication queries: comes from login route
-function getUser(res, mysql, password, userLoggedIn){
-    // find matching password query
-    let sql = `SELECT idpersonnel, position, first_name, last_name FROM personnel WHERE password = ?`;
-    let insert = [password];
-
-    mysql.pool.query(sql, insert, function(err, results, fields){
-        if (err) {
-            console.log(err);
-            return;
-        }
-console.log(results);
-        if(results[0]){
-            // find position's access permissions query
-            let sql = `SELECT permissions FROM positions WHERE idpositions = ?`;
-            let insert = [results[0].position]
-
-            mysql.pool.query(sql, insert, function(err, res, f){
-                if(err){
-                    console.log(err);
-                    return;
-                }
-                userLoggedIn(results[0], res[0].permissions);   // run provided callback function
-            })
-        }
-    })
-}
-
-
+var query = require('./queries.js');                // db query functions file
 /******************************** Begin page Routes *************************************************/
 /** Home - login page route */
 app.get('/', function (req, res) {
@@ -109,7 +74,7 @@ app.post('/login', function (req, res, next) {
         context.invalid = true;
         res.render('login', context);                   //
     } else {
-        getUser(res, mysql, password, userLoggedIn);    // check password
+        query.getUser(res, mysql, password, userLoggedIn);    // check password
         // callback for getUser() queries
         function userLoggedIn(user, permission) {
             if (user){                                  // found user
