@@ -3,7 +3,7 @@ module.exports = {
     // login authentication queries: comes from login route
     getUser: function(res, mysql, password, userLoggedIn) {
         // find matching password query
-        let sql = `SELECT idpersonnel AS id, position, first_name, last_name FROM personnel WHERE password = ?`;
+        let sql = `SELECT idpersonnel AS id, position, first_name, last_name, pto_available, sto_available FROM personnel WHERE password = ?`;
         let insert = [password];
 
         mysql.pool.query(sql, insert, function(err, results, fields){
