@@ -128,7 +128,7 @@ app.post('/register', function (req, res, next) {
 		else {
 			//res.send("success?");
 			//window.alert("Registation Sucessful!");
-			
+			context.message = "Successful Registration!";	
 			res.render('adminHome', context);
 		}
 	});
