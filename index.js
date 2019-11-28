@@ -63,7 +63,8 @@ app.get('/', function (req, res) {
     context = {};
     context.title = '';
     context.layout = 'loginLayout';
-    res.render('login', context);                       // send login screen
+    //res.render('login', context);                       // send login screen
+    res.render('login', context);
 });
 
 // login authentication route - returns: fail login back to Home, success to admin or common menus based on permissions
@@ -104,6 +105,30 @@ app.post('/login', function (req, res, next) {
         }
     }
 
+});
+
+// register user route
+app.post('/register', function (req, res, next) {
+	//res.render('register');
+	//console.log("test");
+	//var inserts = [req.query.password, req.body.password, req.query.fname, req.body.fname];
+	//console.log(inserts);
+	mysql.pool.query("INSERT INTO personnel (`password`, `position`, `first_name`, `last_name`) VALUES(?, ?, ?, ?)",
+	[req.body.password, 3, req.body.fname, req.body.lname], function (err, result) {
+		if(err) {
+			console.log(err);
+			return;
+		}
+		else {
+			//res.send("success?");
+			//window.alert("Registation Sucessful!");
+			res.render('adminHome');
+		}
+	});
+});
+
+app.post('/register-user', function(req, res, next) {
+	res.render('register');
 });
 
 // logout route - !!not finalized!!
