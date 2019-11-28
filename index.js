@@ -83,8 +83,8 @@ app.post('/login', function (req, res, next) {
                 req.session.userId = user.id;           // save session variables
                 req.session.fName = user.first_name;
                 req.session.lName = user.last_name;
-		//req.session.pto = user.pto_available;
-		//req.session.sto = user.sto_available;
+		req.session.pto = user.pto_available;
+		req.session.sto = user.sto_available;
                 req.session.loggedIn = true;
                 context.id = user.id;        // for more direct access to db
                 context.fName = user.first_name;      // set for display in menu
@@ -113,6 +113,12 @@ app.post('/register', function (req, res, next) {
 	//console.log("test");
 	//var inserts = [req.query.password, req.body.password, req.query.fname, req.body.fname];
 	//console.log(inserts);
+	var context ={};
+	context.id = req.session.userId;
+	context.fName = req.session.fName;
+	context.lName = req.session.lName;
+	context.pto = req.session.pto;
+	context.sto = req.session.sto;
 	mysql.pool.query("INSERT INTO personnel (`password`, `position`, `first_name`, `last_name`) VALUES(?, ?, ?, ?)",
 	[req.body.password, 3, req.body.fname, req.body.lname], function (err, result) {
 		if(err) {
@@ -122,7 +128,8 @@ app.post('/register', function (req, res, next) {
 		else {
 			//res.send("success?");
 			//window.alert("Registation Sucessful!");
-			res.render('adminHome');
+			
+			res.render('adminHome', context);
 		}
 	});
 });
