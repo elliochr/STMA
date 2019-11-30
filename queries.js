@@ -1,4 +1,15 @@
 module.exports = {
+    // list staffing positions
+    getPosistions: function (res, mysql, listPositions) {
+        let sql = `SELECT idpositions AS id, position_title AS title FROM positions`;
+        mysql.pool.query(sql, function(err, results, fields){
+            if(err){
+                console.log(err);
+                return;
+            }
+            listPositions(results);
+        })
+    },
 
     // login authentication queries: comes from login route
     getUser: function(res, mysql, password, userLoggedIn) {
@@ -30,5 +41,7 @@ module.exports = {
             }
         })
     }
+
+
 
 }

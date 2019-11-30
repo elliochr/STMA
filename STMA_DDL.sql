@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   `pto_available` FLOAT UNSIGNED NULL DEFAULT 0,
   `sto_available` FLOAT UNSIGNED NULL DEFAULT 0,
   `email_address` VARCHAR(45) NULL,
-  `phone_num` INT UNSIGNED NULL,
+  `phone_num` VARCHAR(12) NULL,
   PRIMARY KEY (`idpersonnel`),
   UNIQUE INDEX `idstaff` (`idpersonnel` ASC),
   INDEX `position_idx` (`position` ASC),

@@ -51,12 +51,19 @@ app.use(session({
         path: '/',
         secure: false,
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000                 // set session timeout in ms
+        maxAge: 5 * 60 * 1000                 // set session timeout in ms
     }
 
 }));
 
 var query = require('./queries.js');                // db query functions file
+
+// default logout procedure - can be used to help prevent unauthorized access
+function logout(req, res) {
+    req.session.loggedIn = false;
+    req.session.destroy(); // remove session
+    res.redirect('/'); // return to login screen
+}
 /******************************** Begin page Routes *************************************************/
 /** Home - login page route */
 app.get('/', function (req, res) {
@@ -74,7 +81,8 @@ app.post('/login', function (req, res, next) {
     if (password == '') {                               // empty password
         context.invalid = true;
         res.render('login', context);                   //
-    } else {
+    } 
+    else {
         query.getUser(res, mysql, password, userLoggedIn);    // check password
         // callback for getUser() queries
         function userLoggedIn(user, permission) {
@@ -83,15 +91,16 @@ app.post('/login', function (req, res, next) {
                 req.session.userId = user.id;           // save session variables
                 req.session.fName = user.first_name;
                 req.session.lName = user.last_name;
-		req.session.pto = user.pto_available;
-		req.session.sto = user.sto_available;
+                req.session.permission = permission;
+		        req.session.pto = user.pto_available;
+		        req.session.sto = user.sto_available;
                 req.session.loggedIn = true;
-                context.id = user.id;        // for more direct access to db
+                // context.id = user.id;        // for more direct access to db
                 context.fName = user.first_name;      // set for display in menu
                 context.lName = user.last_name;
                 context.pto = user.pto_available;
-		context.sto = user.sto_available;
-		if(permission < 3){
+		        context.sto = user.sto_available;
+		        if(permission < 3){
                     res.render('adminHome', context);   // return admin menu
                 }
                 else{
@@ -113,14 +122,11 @@ app.post('/register', function (req, res, next) {
 	//console.log("test");
 	//var inserts = [req.query.password, req.body.password, req.query.fname, req.body.fname];
 	//console.log(inserts);
-	var context ={};
-	context.id = req.session.userId;
+	var context = {};
 	context.fName = req.session.fName;
 	context.lName = req.session.lName;
-	context.pto = req.session.pto;
-	context.sto = req.session.sto;
-	mysql.pool.query("INSERT INTO personnel (`password`, `position`, `first_name`, `last_name`) VALUES(?, ?, ?, ?)",
-	[req.body.password, 3, req.body.fname, req.body.lname], function (err, result) {
+	mysql.pool.query("INSERT INTO personnel (`password`, `position`, `first_name`, `last_name`, `phone_num`, `email_address`, `start_date`, `pto_accumulation_rate`) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+	[req.body.password, req.body.position, req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.email, req.body.startDate, req.body.ptoRate], function (err, result) {
 		if(err) {
 			console.log(err);
 			return;
@@ -134,16 +140,29 @@ app.post('/register', function (req, res, next) {
 	});
 });
 
-app.post('/register-user', function(req, res, next) {
-	res.render('register');
+app.get('/register-user', function(req, res, next) {
+    let context = {};
+    query.getPosistions(res, mysql, positionsList);
+    // callback for 
+    function positionsList(positions){
+        context.fName = req.session.fName;
+        context.lName = req.session.lName;
+        context.positions = positions;
+        if (req.session.permission < 3){
+            res.render('register', context);
+        }
+         else{
+            logout(req, res);
+        }
+    }
 });
+
 
 // logout route - !!not finalized!!
 app.get('/logout', function (req, res, next) {
-    req.session.loggedIn = false;
-    req.session.destroy();                              // remove session
-    res.redirect('/');                                  // return to login screen
+    logout(req,res);
 });
+
 
 /******************************** End  Page Routes ************************************/
 	
