@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   PRIMARY KEY (`idpersonnel`),
   UNIQUE INDEX `idstaff` (`idpersonnel` ASC),
   INDEX `position_idx` (`position` ASC),
+  UNIQUE INDEX `password_UNIQUE` (`password` ASC),
   UNIQUE INDEX `email_address_UNIQUE` (`email_address` ASC),
   CONSTRAINT `position`
     FOREIGN KEY (`position`)
