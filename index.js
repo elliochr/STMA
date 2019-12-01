@@ -70,8 +70,8 @@ app.get('/', function (req, res) {
     context = {};
     context.title = '';
     context.layout = 'loginLayout';
-    //res.render('login', context);                       // send login screen
-    res.render('login', context);
+    context.login = true;
+    res.render('login', context);                       // send login screen
 });
 
 // login authentication route - returns: fail login back to Home, success to admin or common menus based on permissions
@@ -124,6 +124,8 @@ app.get('/menu', function(req, res, next){
     context = {}
     context.fName = req.session.fName;
     context.lName = req.session.lName;
+    context.pto = req.session.pto;
+    context.sto = req.session.sto;
     if(req.session.permission < 3){
         res.render('adminHome', context);
     }
