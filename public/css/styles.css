@@ -28,6 +28,8 @@ h1{
 }
 .big-button a{
   color: #fff;
+  display: block;
+  height: 100%;
 }
 .big-button:hover{
   box-shadow: 1px 1px 1px #aaa;
