@@ -1,9 +1,37 @@
-html {
-
+body {
+  background-image: linear-gradient(135deg, #a471ed, #843aeb);
+  color: #fff;
+  text-shadow: 1px 1px #444;
+  min-height: 100vh;
 }
 
 h1{
   text-align: center;
 }
 
+.topBar{
+  background-color: #555555;
+  color: #fff;
+  font-size: 1.2em;
+  padding: 10px 20px 5px;
+}
 
+.big-button{
+  background-image: linear-gradient(180deg, #6a00ff, #42029c);
+  border-radius: 20px;
+  box-shadow: 1px 1px 1px #333;
+  color: #fff;
+  font-size: 1.1em;
+  padding: 10px;
+  text-align: center;
+  width: 250px;
+}
+.big-button a{
+  color: #fff;
+}
+.big-button:hover{
+  box-shadow: 1px 1px 1px #aaa;
+}
+.big-button:active{
+  background-image: linear-gradient(180deg, #6a00ff, #4202ff);
+}
