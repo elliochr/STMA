@@ -35,3 +35,7 @@ h1{
 .big-button:active{
   background-image: linear-gradient(180deg, #6a00ff, #4202ff);
 }
+
+#logoutBtn{
+  float: right;
+}
