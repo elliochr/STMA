@@ -129,6 +129,8 @@ app.post('/register', function (req, res, next) {
 	[req.body.password, req.body.position, req.body.firstName, req.body.lastName, req.body.phoneNumber, req.body.email, req.body.startDate, req.body.ptoRate], function (err, result) {
 		if(err) {
 			console.log(err);
+			context.message= "Error in Registration :(";
+			res.render('adminHome', context);
 			return;
 		}
 		else {
