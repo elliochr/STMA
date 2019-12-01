@@ -116,12 +116,31 @@ app.post('/login', function (req, res, next) {
 
 });
 
+// return to main menu route
+app.get('/menu', function(req, res, next){
+    if(req.session.permission === 'undefined'){
+        logout(req, res);
+    }
+    context = {}
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    if(req.session.permission < 3){
+        res.render('adminHome', context);
+    }
+    else{
+        res.render('commonHome', context);
+    }
+})
+
 // register user route
 app.post('/register', function (req, res, next) {
 	//res.render('register');
 	//console.log("test");
 	//var inserts = [req.query.password, req.body.password, req.query.fname, req.body.fname];
-	//console.log(inserts);
+    //console.log(inserts);
+    if(req.session.permission >= 3 || req.session.permission === 'undefined'){
+        logout(req, res);
+    }
 	var context = {};
 	context.fName = req.session.fName;
 	context.lName = req.session.lName;
@@ -153,14 +172,14 @@ app.get('/register-user', function(req, res, next) {
         if (req.session.permission < 3){
             res.render('register', context);
         }
-         else{
+        else{
             logout(req, res);
         }
     }
 });
 
 
-// logout route - !!not finalized!!
+// logout route
 app.get('/logout', function (req, res, next) {
     logout(req,res);
 });
