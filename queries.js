@@ -40,6 +40,23 @@ module.exports = {
                 userLoggedIn(null,null);                            // no user found
             }
         })
+    },
+
+    // gets user schedule by user id
+    getUserSchedule: function(res, mysql, context, complete) {
+        var sql = "SELECT start_time, end_time FROM daily_schedule WHERE idpersonnel = ?";
+        var inserts = [context.userId];
+
+        mysql.pool.query(sql, inserts, function(err, results, fields){
+            if(err){
+                console.log(err);
+                res.end();
+            }
+            if (results[0]){
+                context.schedule = results;
+                complete();
+            }
+        });
     }
 
 

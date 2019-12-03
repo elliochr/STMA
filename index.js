@@ -180,6 +180,23 @@ app.get('/register-user', function(req, res, next) {
     }
 });
 
+// Schedule route
+app.get('/schedule', function(req, res){
+    let context = {}
+    req.session.loggedIn = true;
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    context.userId = req.session.userId;    // user id
+    
+    console.log()
+
+    query.getUserSchedule(res, mysql, context, complete);
+    
+    function complete(){        
+        res.render('schedule', context);
+    }
+});
+
 
 // logout route
 app.get('/logout', function (req, res, next) {
