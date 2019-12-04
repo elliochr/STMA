@@ -181,21 +181,18 @@ app.get('/register-user', function(req, res, next) {
 });
 
 app.get('/view-request', function(req, res, next) {
-    console.log("test1");
     var context = {};
     context.fName = req.session.fName;
     context.lName = req.session.lName;
     mysql.pool.query("SELECT personnel.first_name, personnel.last_name, personnel.pto_available, personnel.sto_available, pto_sto_request.request_date, pto_sto_request.req_type, pto_sto_request.req_description, pto_sto_request.approval_status FROM pto_sto_request INNER JOIN personnel ON personnel.idpersonnel = pto_sto_request.idpersonnel;", function(err, row){
         console.log(row);
         context.request = row;
-        console.log("test1.5");
         if(err) {
             console.log(err);
             context.message= "Error view-requests :(";
             res.render('adminHome', context);
         }
         else {
-            console.log("test2");
             res.render('viewRequests', context);
         }
     })

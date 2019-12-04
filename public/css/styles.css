@@ -78,3 +78,36 @@ h1{
 .dashContent{
   background-color: #fff;
 }
+
+.request{
+ border-style: solid;
+ margin: auto;
+ width: 80%;
+ padding: 10px;
+}
+
+.request-message{
+ border-style: solid;
+ border-color: black;
+ background-color: white;
+ color: black;
+ margin-right: 100px;
+ margin-left: 100px;
+ margin-bottom: 5px;
+ margin-top: 25px;
+}
+
+.request-button{
+ border: 3px;
+ border-style: solid;
+ border-color: black;
+ background-color: #807878;
+ color: black;
+ margin-right: 25px;
+ padding-left: 10px;
+ padding-right: 10px;
+}
+
+.req-box{
+ margin-bottom: 15px;
+}
