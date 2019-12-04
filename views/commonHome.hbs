@@ -1,8 +1,39 @@
-<h1>Common Menu</h1>
+<h1>Employee Dashboard</h1>
 <div class="container">
-    <div>Employee ID:{{id}}</div>
-    <div>First Name:{{fName}}</div>
-    <div>Last Name:{{lName}}</div>
-    <div>Accumulated PTO: {{pto}}</div>
-    <div>Remaining Sick Days: {{sto}}</div>	
+    <div class="row">
+        <div class="col-md-4 menu">
+            <div>Accumlated PTO: {{pto}}</div>
+            <div>Remaining Sick Days: {{sto}}</div>
+            <div class="big-button">
+                <a href="/schedule">View My Schedule</a>
+            </div>
+            <div class="big-button">
+                <a href="#">Request Time Off</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">Notifications</div>
+                        <div class="dashContent" id="notificationsBox"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">Time Card</div>
+                        <div class="dashContent" id="timeCardBox"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="dashBox">
+                        <div class="dashLabel">Schedule</div>
+                        <div class="dashContent" id="mySchedBox"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

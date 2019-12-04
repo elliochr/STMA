@@ -54,8 +54,8 @@ module.exports = {
             }
             if (results[0]){
                 context.schedule = results;
-                complete();
             }
+            complete();
         });
     }
 

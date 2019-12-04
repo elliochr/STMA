@@ -1,11 +1,56 @@
-<h1>Admin Menu</h1>
+<h1>Supervisor Dashboard</h1>
 <div class="container">
-    {{!-- <div>First Name: {{fName}}</div>
-    <div>Last Name: {{lName}}</div> --}}
-    <div>Accumlated PTO: {{pto}}</div>
-    <div>Remaining Sick Days: {{sto}}</div>
-    <div class="big-button">
-	    <a href="/register-user">Create New Staff Member</a>
+    <div class="row">
+        <div class="col-md-4 menu">
+            <div>Accumlated PTO: {{pto}}</div>
+            <div>Remaining Sick Days: {{sto}}</div>
+			<div class="big-button">
+          		<a href="/schedule">View My Schedule</a>
+        	</div>
+            <div class="big-button">
+                <a href="#">Request Time Off</a>
+            </div>
+            <div class="big-button">
+                <a href="/register-user">Create New Staff Member</a>
+            </div>
+            <div class="big-button">
+                <a href="#">View Team Schedule</a>
+            </div>
+            <div class="big-button">
+                <a href="#">New Team Schedule</a>
+            </div>
+            
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">Notifications</div>
+                        <div class="dashContent" id="notificationsBox"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">Time Card</div>
+                        <div class="dashContent" id="timeCardBox"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">Team Schedule</div>
+                        <div class="dashContent" id="teamSchedBox"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashBox">
+                        <div class="dashLabel">PTO Approvals</div>
+                        <div class="dashContent" id="ptoApproveBox"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div>{{message}}</div>
 </div>
