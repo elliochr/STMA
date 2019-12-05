@@ -182,9 +182,9 @@ app.get('/register-user', function(req, res, next) {
 
 // Send request PTO/STO route
 app.post('/sendRequest', function (req, res, next) {
+    var context = {};
     context.fName = req.session.fName;
 	context.lName = req.session.lName;
-    var context = {};
 	mysql.pool.query("INSERT INTO pto_sto_request (`request_date`, `request_type`, `request_description`) VALUES(?, ?, ?)",
 	[req.body.requestDate, req.body.requestType, req.body.requestDescription], function (err, result) {
 		if(err) {
