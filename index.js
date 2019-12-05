@@ -184,8 +184,8 @@ app.get('/register-user', function(req, res, next) {
 app.post('/sendRequest', function (req, res, next) {
     var context = {};
     context.fName = req.session.fName;
-	context.lName = req.session.lName;
-	mysql.pool.query("INSERT INTO pto_sto_request (`request_date`, `request_type`, `request_description`) VALUES(?, ?, ?)",
+    context.lName = req.session.lName;
+    mysql.pool.query("INSERT INTO pto_sto_request (`request_date`, `req_type`, `req_description`) VALUES(?, ?, ?)",
 	[req.body.requestDate, req.body.requestType, req.body.requestDescription], function (err, result) {
 		if(err) {
 			console.log(err);
@@ -196,21 +196,16 @@ app.post('/sendRequest', function (req, res, next) {
             else{
                 res.render('commonHome', context);
             }
-            
             return;
 		}
 		else {
-			//res.send("success?");
-			//window.alert("Registation Sucessful!");
-			context.message = "Successful Request Submission!";	
-            if(req.session.permission < 3){
+			context.message = "Successful Registration!";	
+			if(req.session.permission < 3){
                 res.render('adminHome', context);
             }
             else{
                 res.render('commonHome', context);
             }
-
-            return;
 		}
 	});
 });
