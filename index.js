@@ -181,35 +181,6 @@ app.get('/register-user', function(req, res, next) {
 });
 
 // Send request PTO/STO route
-app.post('/sendRequest', function (req, res, next) {
-    var context = {};
-    context.fName = req.session.fName;
-    context.lName = req.session.lName;
-    mysql.pool.query("INSERT INTO pto_sto_request (`request_date`, `req_type`, `req_description`) VALUES(?, ?, ?)",
-	[req.body.requestDate, req.body.requestType, req.body.requestDescription], function (err, result) {
-		if(err) {
-			console.log(err);
-			context.message= "Error in Request Submission :(";
-            if(req.session.permission < 3){
-                res.render('adminHome', context);
-            }
-            else{
-                res.render('commonHome', context);
-            }
-            return;
-		}
-		else {
-			context.message = "Successful Registration!";	
-			if(req.session.permission < 3){
-                res.render('adminHome', context);
-            }
-            else{
-                res.render('commonHome', context);
-            }
-		}
-	});
-});
-
 app.get('/send-request-form', function(req, res, next) {
     let context = {};
     context.userId = req.session.userId;
@@ -219,6 +190,47 @@ app.get('/send-request-form', function(req, res, next) {
     context.sto = req.session.sto;
     res.render('sendRequest', context); 
 });
+app.post('/sendRequest', function (req, res, next) {
+    var context = {};
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    mysql.pool.query("INSERT INTO pto_sto_request (`idpersonnel`, `request_date`, `req_type`, `req_description`) VALUES(?, ?, ?, ?)",
+	[req.session.userId, req.body.requestDate, req.body.requestType, req.body.requestDescription], function (err, result) {
+		if(err) {
+			console.log(err);
+			context.message= "Error in Request Submission :(";
+            if(req.session.permission < 3){
+		context.message = "Request submitted successfully";
+                res.render('adminHome', context);
+            }
+            else{
+		context.message = "Request submitted successfully";
+                res.render('commonHome', context);
+            }
+            return;
+		}
+		else {
+			context.message = "Request submitted successfully";	
+			if(req.session.permission < 3){
+                res.render('adminHome', context);
+            }
+            else{
+                context.message = "Request submitted successfully";
+		res.render('commonHome', context);
+            }
+		}
+	});
+});
+
+/*app.get('/send-request-form', function(req, res, next) {
+    let context = {};
+    context.userId = req.session.userId;
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    context.pto = req.session.pto;
+    context.sto = req.session.sto;
+    res.render('sendRequest', context); 
+});*/
 
 // View request route
 app.get('/view-request', function(req, res, next) {
