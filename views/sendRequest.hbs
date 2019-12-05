@@ -1,0 +1,26 @@
+<h1>Request Time Off</h1>
+<div class="container">
+    <div class="col-xs-12 col-md-6 offset-md-3">
+    <div>Accumlated PTO: {{pto}}</div>
+    <div>Remaining Sick Days: {{sto}}</div>
+    <br>
+    <form id="reqestTimeOffForm" action="/sendReqest" method="post">
+        <div class="form-group">
+            <select name="requestType" id="requestType" required>
+                <option selected>Choose Type</option>
+                    <option value="0">PTO</option>
+                    <option value="1">STO</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="requestDescription">Reason for request</label>
+            <input type="text" name= "requestDescription" id="requestDescription" class="form-control" placeholder="Reason" required>
+        </div>
+        <div class="form-group">
+            <label for="requestDate">Choose Date</label>
+            <input type="date" id="requestDate" name="requestDate" required>
+        </div>
+        <input type="submit" value="Request PTO/STO" id="sendTimeOffRequest" class="big-button">
+    </form>
+    </div>
+</div>
