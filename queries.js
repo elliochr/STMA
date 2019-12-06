@@ -44,7 +44,22 @@ module.exports = {
 
     // gets user schedule by user id
     getUserSchedule: function(res, mysql, context, complete) {
-        var sql = "SELECT start_time, end_time FROM daily_schedule WHERE idpersonnel = ?";
+        // customized format to be sent to the schedule view        
+        function formatTime(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var meridiem = hours >= 12 ? 'PM' : 'AM';
+        
+            hours %= 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            
+            return hours + ':' + minutes + ' ' + meridiem;
+        }
+
+        // currentDate will filter only the current on-going schedule.
+        var currentDate = new Date().toISOString().slice(0,19).replace('T', ' ');
+        var sql = "SELECT start_time, end_time FROM daily_schedule WHERE idpersonnel = ? AND start_time >= \'" + currentDate + "\'";
         var inserts = [context.userId];
 
         mysql.pool.query(sql, inserts, function(err, results, fields){
@@ -53,6 +68,13 @@ module.exports = {
                 res.end();
             }
             if (results[0]){
+                // reformat each date, start time, and end time so the view can work with the parts.
+                results.forEach(e => {
+                    e["date"] = e.start_time.toDateString();    // add date as key:value
+                    e.start_time = formatTime(e.start_time)     // just time
+                    e.end_time = formatTime(e.end_time)         // just time
+                });
+                console.log(results)
                 context.schedule = results;
             }
             complete();
@@ -86,4 +108,5 @@ module.exports = {
         });
     }
 
+    }
 }

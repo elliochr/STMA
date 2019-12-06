@@ -1,14 +1,20 @@
 <h1>Schedule</h1>
 <div class="container">
-    <div>{{fName}} {{lName}}</div>
-    
-    {{#each schedule}}
-    <div>Start Time: {{start_time}}</div>
-    <div>End Time: {{end_time}}</div>
-    {{/each}}
-
-</div>
-
-<div class="big-button col-md-6" id="menuBtn">
-    <a href="#">Assign Schedule</a>
+    <div class="row">
+        <div class="col-md-4 menu">
+            <div class="big-button">
+                <a href="#">Assign My Schedule</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+            {{#each schedule}}
+                <div class="col-md-4 py-3">
+                    <div><h4>{{date}}</h4></div>
+                    <div>{{start_time}} to {{end_time}}</div>
+                </div>
+            {{/each}}
+            </div>
+        </div>
+    </div>
 </div>
