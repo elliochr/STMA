@@ -160,6 +160,7 @@ input[type=date], input[type=time], select{
   background-color: #944;
   border-radius: 50%;
   color: #fff;
+  cursor: pointer;
   line-height: 12px;
   position: absolute;
   top: 0;
