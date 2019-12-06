@@ -316,8 +316,10 @@ app.get('/clock-in', function(req, res){
     var context = {};
     context.fName = req.session.fName;
     context.lName = req.session.lName;
-    context.time = Date.now();
-    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_in`) values(?,?)", [req.session.userId, context.time], function(err, row) {
+    context.pto = req.session.pto;
+    context.sto = req.session.sto;
+    //context.time = Date.now();
+    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_in`) values(?,?)", [req.session.userId, curdate()], function(err, row) {
         if(err) {
             console.log(err);
             context.message = "Error clocking in";
@@ -343,6 +345,8 @@ app.get('/clock-out', function(req, res){
     var context = {};
     context.fName = req.session.fName;
     context.lName = req.session.lName;
+    context.pto = req.session.pto;
+    context.sto = req.session.sto;
     context.time = Date.now();
     mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_out`) values(?,?)", [req.session.userId, context.time], function(err, row) {
         if(err) {
