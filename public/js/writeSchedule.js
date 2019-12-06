@@ -67,6 +67,16 @@ window.addEventListener('load', () => {
         pickDate.parentElement.appendChild(alert);
     }
 
+    function checkTimes(start, end){
+        if(start.length == 0 || end.length == 0){
+            return 0;
+        }
+        if(start > end){
+            return 0;
+        }
+        return 1;
+    }
+
     // save schedule
     document.getElementById('saveSchedBtn').addEventListener('click', ()=>{
         let pickDate = document.getElementById('pickDate');
@@ -82,6 +92,11 @@ window.addEventListener('load', () => {
             memberArr = [];
             j = 0;
             for(let i = 0; i < schedList.length; i++){
+                let check = checkTimes(schedList[i].value, schedList[i + 1].value);
+                if(check == 0){
+                    alert(`Please assign valid times`);
+                    return;
+                }
                 let id = schedList[i].getAttribute('data-id');
                 let startTime = `${pickDate.value} 00:${schedList[i].value}`;
                 let endTime = `${pickDate.value} 00:${schedList[i + 1].value}`;
