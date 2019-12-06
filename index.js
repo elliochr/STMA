@@ -2,6 +2,8 @@ let bodyParser = require('body-parser');
 let path = require('path');
 let mysql = require('./dbcon.js');              // set database connection
 let fs = require('fs');                         // access to local files
+let multer = require('multer');
+let upload = multer();
 
 var express = require('express');
 let app = express();                            // begin application
@@ -17,9 +19,9 @@ app.set('view engine', 'hbs');
 app.set('port', 11113);
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(bodyParser.raw());
+// app.use(bodyParser.raw());
 app.use(express.static('public'));                  // set name of public resource directory
-//app.use('/', require('./queries.js'))
+
 
 let cssFile;                                        // access to public css files
 app.get(`/css/${cssFile}`, function(req,res){
@@ -64,6 +66,7 @@ function logout(req, res) {
     req.session.destroy(); // remove session
     res.redirect('/'); // return to login screen
 }
+
 /******************************** Begin page Routes *************************************************/
 /** Home - login page route */
 app.get('/', function (req, res) {
@@ -198,15 +201,15 @@ app.get('/view-request', function(req, res, next) {
     })
 });
 
-// Schedule route
+// View Personal Schedule route
 app.get('/schedule', function(req, res){
-    let context = {}
+    let context = {};
     // req.session.loggedIn = true;
     context.fName = req.session.fName;
     context.lName = req.session.lName;
     context.userId = req.session.userId;    // user id
     
-    console.log()
+    console.log();
 
     query.getUserSchedule(res, mysql, context, complete);
     
@@ -216,10 +219,50 @@ app.get('/schedule', function(req, res){
     }
 });
 
+// Create new schedule route
+app.get('/write-schedule', function(req, res){
+    let context = {};
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    context.script = ['writeSchedule.js'];
+    
+    res.render('createSchedule', context);
+});
+
+app.post('/writeSchedDate', upload.any(), function(req, res){
+    if(req.session.permission < 3){
+        let context = {};
+        let schedule = JSON.parse(req.body.schedule);
+        console.log(schedule);
+        query.writeSchedDate(res, mysql, schedule, complete);
+
+        function complete(response){
+            res.send(response);
+            res.end();
+        }
+    }
+});
+
+// get list of staff members
+app.get('/getStaff', function (req, res) {
+    if (req.session.permission < 3) {
+        query.getStaffList(res, mysql, complete);
+
+        function complete(results) {
+            //console.log(`index: ${results}`);
+            res.send(results);
+            res.end();
+        }
+    }
+    else {
+        logout(req, res);
+    }
+});
+
 
 // logout route
 app.get('/logout', function (req, res, next) {
-    logout(req,res);
+    logout(req, res);
 });
 
 

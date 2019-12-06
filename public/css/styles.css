@@ -9,6 +9,11 @@ h1{
   text-align: center;
 }
 
+input[type=date], input[type=time], select{
+  border-radius: 10px;
+  text-align: center;
+}
+
 .topBar{
   background-color: #555555;
   box-shadow: 0 1px 3px #333;
@@ -63,7 +68,7 @@ h1{
   border-radius: 10px;
   box-shadow: 0 0 3px #fdf;
   margin: 10px 5px;
-  min-height: 250px;
+  overflow: hidden;
 }
 
 .dashLabel{
@@ -76,7 +81,17 @@ h1{
 }
 
 .dashContent{
-  background-color: #fff;
+  background-color: #eee;
+  color: #333;
+  height: 90%;
+  overflow-y: auto;
+  text-shadow: 1px 0 #aaa;
+}
+
+.mainDashBox{
+  height: 250px;
+  min-height: 250px;
+  max-height: 250px;
 }
 
 .request{
@@ -110,4 +125,54 @@ h1{
 
 .req-box{
  margin-bottom: 15px;
+}
+
+/*scheduling page*/
+.schedBox{
+  height: 300px;
+  min-height: 300px;
+  max-height: 300px;
+}
+
+.schedBox li{
+  transition: ease 0.2s;
+}
+.schedBox li:hover{
+  background-color: #444;
+  color: #eee;
+  text-shadow: 1px 0 #4202ff;
+  transition: ease 0.4s;
+}
+
+#shiftBox label {
+  margin-right: 5px;
+}
+
+.alert{
+  position: absolute;
+  font-size: .8em;
+  color: white;
+  margin: 0 5px;
+  text-shadow: 1px 0px 2px #f00;
+}
+
+.remSched{
+  background-color: #944;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+}
+
+.selectDays{
+  background-color: #eee;
+}
+
+.calBox{
+  background-color: #eee;
 }
