@@ -258,13 +258,10 @@ app.get('/schedule', function(req, res){
     context.fName = req.session.fName;
     context.lName = req.session.lName;
     context.userId = req.session.userId;    // user id
-    
-    console.log()
 
     query.getUserSchedule(res, mysql, context, complete);
     
     function complete(){
-
         res.render('schedule', context);
     }
 });
