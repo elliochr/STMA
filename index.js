@@ -317,7 +317,7 @@ app.get('/clock-in', function(req, res){
     context.fName = req.session.fName;
     context.lName = req.session.lName;
     context.time = Date.now();
-    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_in`) values(?,?)", [req.session.userID, context.time], function(err, row) {
+    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_in`) values(?,?)", [req.session.userId, context.time], function(err, row) {
         if(err) {
             console.log(err);
             context.message = "Error clocking in";
@@ -329,6 +329,33 @@ app.get('/clock-in', function(req, res){
             }
         } else {
             context.message = "Clock in successful";
+            if (req.session.permission < 3){
+                res.render('adminHome', context);
+            }
+            else{
+                res.render('commonHome', context);
+            }
+        }
+    })
+});
+
+app.get('/clock-out', function(req, res){
+    var context = {};
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    context.time = Date.now();
+    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_out`) values(?,?)", [req.session.userId, context.time], function(err, row) {
+        if(err) {
+            console.log(err);
+            context.message = "Error clocking out";
+            if (req.session.permission < 3){
+                res.render('adminHome', context);
+            }
+            else{
+                res.render('commonHome', context);
+            }
+        } else {
+            context.message = "Clock out successful";
             if (req.session.permission < 3){
                 res.render('adminHome', context);
             }
