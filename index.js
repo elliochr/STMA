@@ -312,6 +312,33 @@ app.get('/getStaff', function (req, res) {
     }
 });
 
+app.get('/clock-in', function(req, res){
+    var context = {};
+    context.fName = req.session.fName;
+    context.lName = req.session.lName;
+    context.time = Date.now();
+    mysql.pool.query("INSERT INTO presence_status(`id_personnel`, `clock_in`) values(?,?)", [req.session.userID, context.time], function(err, row) {
+        if(err) {
+            console.log(err);
+            context.message = "Error clocking in";
+            if (req.session.permission < 3){
+                res.render('adminHome', context);
+            }
+            else{
+                res.render('commonHome', context);
+            }
+        } else {
+            context.message = "Clock in successful";
+            if (req.session.permission < 3){
+                res.render('adminHome', context);
+            }
+            else{
+                res.render('commonHome', context);
+            }
+        }
+    })
+});
+
 
 // logout route
 app.get('/logout', function (req, res, next) {
