@@ -249,6 +249,7 @@ app.get('/view-request', function(req, res, next) {
             res.render('adminHome', context);
         }
         else {
+	    //console.log(row.req_type);
             res.render('viewRequests', context);
         }
     })
