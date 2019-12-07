@@ -98,8 +98,8 @@ window.addEventListener('load', () => {
                     return;
                 }
                 let id = schedList[i].getAttribute('data-id');
-                let startTime = `${pickDate.value} 00:${schedList[i].value}`;
-                let endTime = `${pickDate.value} 00:${schedList[i + 1].value}`;
+                let startTime = `${pickDate.value} ${schedList[i].value}:00`;
+                let endTime = `${pickDate.value} ${schedList[i + 1].value}:00`;
                 memberArr.push([id, startTime, endTime]);
                 i++;
             }
